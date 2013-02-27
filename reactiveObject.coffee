@@ -10,8 +10,20 @@ class ReactiveObject
     #@_keyValueDeps = {}
 
     if properties
-      for property in properties
-        @_addProperty property
+      if properties instanceof Array
+        for property in properties
+          @_addProperty property
+      else if 'object' == typeof properties
+        for property, value of properties
+          @_addProperty property
+          if value instanceof Array
+            #TODO: Add ReactiveArray?
+          else if 'object' == typeof value
+            @[property] = new ReactiveObject value
+          else
+            #TODO: Handle functions and other non-scalar types
+            @[property] = value
+
 
   _register: (key) ->
     contexts = @_keyDeps[key] ?= new Meteor.deps._ContextSet()
@@ -87,3 +99,7 @@ splice()	Adds/Removes elements from an array
 toString()	Converts an array to a string, and returns the result
 unshift()
 ###
+
+class ReactiveForm extends ReactiveObject
+  constructor: (selector) ->
+
