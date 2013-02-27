@@ -17,7 +17,7 @@ class ReactiveObject
         for property, value of properties
           @_addProperty property
           if value instanceof Array
-            #TODO: Add ReactiveArray?
+            @[property] = new ReactiveArray value
           else if 'object' == typeof value
             @[property] = new ReactiveObject value
           else

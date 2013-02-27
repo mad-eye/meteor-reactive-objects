@@ -70,13 +70,13 @@ describe 'ReactiveObject', ->
       Meteor.flush()
       assert.equal value, 1
 
-    #it 'should invalidate higher contexts', ->
-      #value = null
-      #Meteor.autorun ->
-        #value = robj.a.b
-      #robj.a.b.c = 1
-      #Meteor.flush()
-      #assert.deepEqual value, {c:1}
+    it 'should invalidate higher contexts', ->
+      value = null
+      Meteor.autorun ->
+        value = robj.a.b._keys
+      robj.a.b.c = 1
+      Meteor.flush()
+      assert.deepEqual value, {c:1, d:'D'}
 
 
 
