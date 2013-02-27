@@ -5,73 +5,76 @@ if Object.prototype.__defineGetter__ && !Object.defineProperty
 
 class ReactiveObject
   constructor: (properties) ->
-    @keys = {}
-    @keyDeps = {}
-    @keyValueDeps = {}
+    @_keys = {}
+    @_keyDeps = {}
+    #@_keyValueDeps = {}
 
-    for property in properties
-      @addProperty property
+    if properties
+      for property in properties
+        @_addProperty property
 
-  register: (key) ->
-    contexts = @keyDeps[key] ?= new Meteor.deps._ContextSet()
+  _register: (key) ->
+    contexts = @_keyDeps[key] ?= new Meteor.deps._ContextSet()
     contexts.addCurrentContext()
 
-  invalidate: (key) ->
-    @keyDeps[key]?.invalidateAll()
+  _invalidate: (key) ->
+    @_keyDeps[key]?.invalidateAll()
 
-  get: (key) ->
-    @register key
-    return @keys[key]
+  _get: (key) ->
+    @_register key
+    return @_keys[key]
     
-  set: (key, value) ->
-    @keys[key] = value
-    @invalidate key
+  _set: (key, value) ->
+    @_keys[key] = value
+    @_invalidate key
     console.log "setting value", key, value
 
 
-  addProperty: (name)->
+  _addProperty: (name)->
     console.log "adding property", name
     Object.defineProperty @, name,
       get: ->
-        @.get(name)
+        @_get(name)
         
       set: (value)->
-        @.set(name, value)
+        @_set(name, value)
+
 
 class ReactiveArray extends ReactiveObject
   constructor: (initialArray) ->
-    @array = []
-    @defineLength
-    @push x for x in initialArray
+    @array = initialArray ? []
+    @defineLength()
+    super()
 
   defineLength: ->
     Object.defineProperty @, 'length',
       get: ->
-        @register 'length'
+        @_register 'length'
         @array.length
         
       set: (value)->
-        @invalidate 'length'
+        @_invalidate 'length'
         @array.length = value
-    
-    
+
   push: (object) ->
-    @invalidate 'length'
+    @_invalidate 'length'
     @array.push object
-    
+
   pop: ->
-    @invalidate 'length'
-    @array.pop
+    @_invalidate 'length'
+    @array.pop()
 
-  shift: (object) ->
-    @invalidate 'length'
-    @array.shift object
+  shift: ->
+    @_invalidate 'length'
+    console.log "shift"
+    @array.shift()
 
-  unshift: ->
-    @invalidate 'length'
-    @array.unshift
+  unshift: (object) ->
+    @_invalidate 'length'
+    console.log "unshift", object
+    @array.unshift object
 
-    ### Array methods
+### Array methods
     concat()	Joins two or more arrays, and returns a copy of the joined arrays
 indexOf()	Search the array for an element and returns it's position
 join()	Joins all elements of an array into a string

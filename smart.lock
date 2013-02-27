@@ -5,7 +5,15 @@
     "commit": "2d8b41a87cec884489ead138b5dfea31487363f3"
   },
   "dependencies": {
-    "basePackages": {},
-    "packages": {}
+    "basePackages": {
+      "mocha-web": {}
+    },
+    "packages": {
+      "mocha-web": {
+        "git": "https://github.com/mad-eye/meteor-mocha-web.git",
+        "tag": "v0.0.2",
+        "commit": "c534e901f9e5423240ab9c2de121890999d68bbb"
+      }
+    }
   }
 }
