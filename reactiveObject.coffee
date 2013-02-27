@@ -27,11 +27,11 @@ class ReactiveObject
   _set: (key, value) ->
     @_keys[key] = value
     @_invalidate key
-    console.log "setting value", key, value
+    #console.log "setting value", key, value
 
 
   _addProperty: (name)->
-    console.log "adding property", name
+    #console.log "adding property", name
     Object.defineProperty @, name,
       get: ->
         @_get(name)
@@ -66,12 +66,10 @@ class ReactiveArray extends ReactiveObject
 
   shift: ->
     @_invalidate 'length'
-    console.log "shift"
     @array.shift()
 
   unshift: (object) ->
     @_invalidate 'length'
-    console.log "unshift", object
     @array.unshift object
 
 ### Array methods
