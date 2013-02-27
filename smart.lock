@@ -6,13 +6,19 @@
   },
   "dependencies": {
     "basePackages": {
-      "mocha-web": {}
+      "mocha-web": {},
+      "form2js": {}
     },
     "packages": {
       "mocha-web": {
         "git": "https://github.com/mad-eye/meteor-mocha-web.git",
         "tag": "v0.0.2",
         "commit": "c534e901f9e5423240ab9c2de121890999d68bbb"
+      },
+      "form2js": {
+        "git": "https://github.com/rithis/meteor-form2js",
+        "tag": "v2.0.0r1",
+        "commit": "d188d3ae276d3344f4394411378699ad702138a0"
       }
     }
   }

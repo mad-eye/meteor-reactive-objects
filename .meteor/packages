@@ -9,3 +9,4 @@ preserve-inputs
 coffeescript
 mocha-web
 jquery
+form2js

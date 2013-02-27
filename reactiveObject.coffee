@@ -17,7 +17,8 @@ class ReactiveObject
         for property, value of properties
           @_addProperty property
           if value instanceof Array
-            @[property] = new ReactiveArray value
+            #@[property] = new ReactiveArray value
+            @[property] = value
           else if 'object' == typeof value
             @[property] = new ReactiveObject value
           else
@@ -100,6 +101,37 @@ toString()	Converts an array to a string, and returns the result
 unshift()
 ###
 
+###
+# This creates a reactive object populated with the values of
+# the form specified by the selector.  If the Meteor.template
+# fontaining the form element is passed in, it will also update
+# itself on changes to the form inputs' values.
+###
 class ReactiveForm extends ReactiveObject
-  constructor: (selector) ->
+  constructor: (@selector, template) ->
+    formVals = $(selector).serializeArray()
+    formObj = {}
+    for valElt in formVals
+      formObj[valElt.name] ?= []
+      formObj[valElt.name].push valElt.value
+
+    #Unpack singleton values
+    for name, val of formObj
+      if val.length == 1
+        formObj[name] = val[0]
+
+    @_registerTemplate(template)
+    super formObj
+
+  _registerTemplate: (template) ->
+    console.log "Registering template", template?
+    if template
+      #events = {}
+      #events["change"] = (e) ->
+        #console.log e
+      template.events ->
+        'change input' : (e) ->
+          console.log 'Event found:', e
+
+  _setPath: (path, key) ->
 

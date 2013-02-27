@@ -4,10 +4,17 @@
 
 <body>
   <h1>Reactive Tests</h1>
-  <form id="theForm">
-    <input type="text" placeholder="Woo woo" />
-
-  </form>
+  {{> formBox }}
   {{> mochaTestReport }}
 </body>
 
+<template name="formBox" >
+
+  <form id="theForm">
+    <input id="petInput" type="text" name="pet" value="Cat" />
+
+    <input type="checkbox" name="food" value="carrot" checked />
+    <input type="checkbox" name="food" value="banana" checked />
+  </form>
+
+</template>
